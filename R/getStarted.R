@@ -4,3 +4,6 @@ source('~/Projects/R/aiquant/R/autogarch.R')
 library(xts)
 fitX50 = garchAuto(ret50, cores=2, trace=TRUE)
 plot(fitX50)
+
+
+
