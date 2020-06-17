@@ -1,9 +1,16 @@
 # read in data and X50$X7 is the daily data 
 library(readr)
+library(stochvol)
 i2005 <- read_csv("aiqtt_data/i2005.txt", col_names = FALSE)
 i2009 <- read_csv("aiqtt_data/i2009.txt", col_names = FALSE)
+i2005ret_stoch <- logret(i2005$X7, demean = TRUE)
+i2009ret_stoch <- logret(i2009$X7, demean = TRUE)
 i2005ret <- diff(log(i2005$X7))
 i2009ret <- diff(log(i2009$X7))
 source('~/Projects/R/aiquant/R/autogarch.R')
 i2005ret_fit = garchAuto(i2005ret, cores=2, trace=TRUE)
 i2009ret_fit = garchAuto(i2009ret, cores=2, trace=TRUE)
+
+i2005_bayes_fit <- svsample(i2005ret_stoch, priormu = c(-10, 1), priorphi = c(20, 1.1),  priorsigma = 0.1)
+summary(i2005_bayes_fit)
+plot(i2005_bayes_fit, showobs = FALSE)
